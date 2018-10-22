@@ -19,17 +19,17 @@ class Cts:
                 <cts:CredentialHeader>
                     <!--Optional:-->
                     <cts:ID>"""
-            + id + """</cts:ID>
+        + id + """</cts:ID>
                     <!--Optional:-->
                     <cts:MDP>"""
-            + pwd + """</cts:MDP>
+        + pwd + """</cts:MDP>
                 </cts:CredentialHeader>
             </soap:Header>
             <soap:Body>
                 <cts:rechercheProchainesArriveesWeb>
                     <!--Optional:-->
                     <cts:CodeArret>"""
-            + arret + """</cts:CodeArret>
+        + arret + """</cts:CodeArret>
                     <cts:Mode>2</cts:Mode>
                     <!--Optional:-->
                     <cts:Heure>"""
