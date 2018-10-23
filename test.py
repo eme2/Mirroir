@@ -3,7 +3,7 @@
 
 import thing, dateConv, openWeather, menuCantine, cts
 import time
-import keys
+from keys import *
 
 deb = time.time()
 menuPhil = menuCantine.MenuCantine()
@@ -13,12 +13,12 @@ tempExt = thing.Thing(keyPiscine,1)
 portail = thing.Thing(keyPortail,1)
 tempExt.load()
 portail.load()
-m = openWeather.OWM()
+m = openWeather.OWM(meteoKey)
 m.load("demo")
 m.analyse()
 dt = dateConv.DateConv()
 
-bus = cts.Cts()
+bus = cts.Cts(idCts, pwdCts, arretCts)
 bus.load()
 
 print("------------------")

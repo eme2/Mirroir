@@ -18,21 +18,18 @@ class Cts:
             <soap:Header>
                 <cts:CredentialHeader>
                     <!--Optional:-->
-                    <cts:ID>"""
-        + id + """</cts:ID>
+                    <cts:ID>{id}</cts:ID>
                     <!--Optional:-->
-                    <cts:MDP>"""
-        + pwd + """</cts:MDP>
+                    <cts:MDP>{pwd}</cts:MDP>
                 </cts:CredentialHeader>
             </soap:Header>
             <soap:Body>
                 <cts:rechercheProchainesArriveesWeb>
                     <!--Optional:-->
-                    <cts:CodeArret>"""
-        + arret + """</cts:CodeArret>
+                    <cts:CodeArret>{arret}</cts:CodeArret>
                     <cts:Mode>2</cts:Mode>
                     <!--Optional:-->
-                    <cts:Heure>"""
+                    <cts:Heure>""".format(id=id, pwd=pwd, arret=arret)
         self.body2 = """</cts:Heure>
                 <cts:NbHoraires>3</cts:NbHoraires>
             </cts:rechercheProchainesArriveesWeb>
