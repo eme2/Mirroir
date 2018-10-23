@@ -26,9 +26,9 @@ area = im.crop(box)
 print("crop : ", area.size)
 
 
-area.save("jour.png", "PNG")
+area.save("jour.gif", "GIF")
 reduc = area.resize((140,400), Image.ANTIALIAS)
 inv = PIL.ImageOps.invert(reduc)
 print("resize ", reduc.size)
-reduc.save("reduc.png", "PNG")
-inv.save("invert.png", "PNG")
+reduc.save("reduc.gif", "GIF")
+inv.save("invert.gif", "GIF")

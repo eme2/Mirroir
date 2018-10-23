@@ -10,6 +10,7 @@ if jourSem > 5:
 else:
     sem = str(dt.numSem())
 
+sem = "45"
 url = "http://www.macantineetmoi.com/images/menu/sainte-clotilde/sainte-clotilde_S"+sem+".jpg"
 file_name = "menu.jpg"
 print("Recuperation de ", url)

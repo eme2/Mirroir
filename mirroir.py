@@ -4,7 +4,7 @@
 import thing, dateConv, openWeather, menuCantine, cts
 import tkinter, time
 from tkinter import *
-import keys
+from keys import *
 
 
 # Temps initial en secondes
@@ -16,8 +16,8 @@ print("Tick : ", tick)
 menuPhil = menuCantine.MenuCantine()
 tempExt = thing.Thing(keyPiscine,1)
 portail = thing.Thing(keyPortail,1)
-meteo = openWeather.OWM()
-bus = cts.Cts()
+meteo = openWeather.OWM(meteoKey)
+bus = cts.Cts(idCts, pwdCts, arretCts)
 dt = dateConv.DateConv()
 
 def majMin():
@@ -48,12 +48,19 @@ def maj10min():
 	bus.load()
 
 root = Tk()
-canvas = Canvas(root, width=140, height=400, background='black')
+#larg = root.winfo_screenwidth()
+#haut = root.winfo_screenheight()
+larg = 1280
+haut = 1024
+
+# highlightthinkness=0 pour éviter la bordure
+canvas = Canvas(root, width=140, height=400, background='black', highlightthickness=0)
 #txt1 = canvas.create_text(75,75, text="Cible", font="Arial 16 italic", fill="blue")
-photo = PhotoImage(file="invert.png")
+photo = PhotoImage(file="invert.gif")
 canvas.create_image(0,0,anchor=NW, image=photo)
 #canvas.grid(row=0, sticky='e')
-canvas.place(x=600, y=0)
+offset = larg - 150
+canvas.place(x=offset, y=0)
 
 # Variables tkinter
 dtJour = StringVar()
@@ -77,7 +84,10 @@ labelTP = Label(root, textvariable=piscTemp, fg="white", bg="black")
 labelTP.grid(row=3)
 
 root.title('Mirroir oh mon beau mirroir')
-root.attributes("-fullscreen", True)
+if sys.platform.startswith("darwin"):		# sur mac
+	root.geometry("1280x1024+100+80")
+else:
+	root.attributes("-fullscreen", True)
 def clic(t):
 	pass
 root.bind("<1>", clic)

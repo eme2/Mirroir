@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import thing, dateConv, openWeather, menuCantine, cts
-import time
+import time, sys
 from keys import *
 
+print("Exécution sur : ", sys.platform)
 deb = time.time()
 menuPhil = menuCantine.MenuCantine()
 menuPhil.load()
