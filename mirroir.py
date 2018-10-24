@@ -20,32 +20,7 @@ meteo = openWeather.OWM(meteoKey)
 bus = cts.Cts(idCts, pwdCts, arretCts)
 dt = dateConv.DateConv()
 
-def majMin():
-	print("Màj")
-	dtJour.set(dt.nowStr())
-	hJour.set(dt.heure())
-	print("Màj tempExt")
-	tempExt.load()
-	print("Màj Retour")
-	derMesure =  tempExt.getField(0, "created_at")
-	dtIso = dt.dateFromISO(derMesure)
-	diff = dt.nowUTC() - dtIso
-	extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field1")), int(diff.total_seconds())//60))
-	piscTemp.set("piscine à {}°".format(float(tempExt.getField(0, "field2"))))
-	print("màj Fin")
 
-def maj10min():
-	print("Maj menu")
-	menuPhil.load()
-	print("Maj temp")
-	tempExt.load()
-	int("Maj portail")
-	portail.load()
-	print("Maj meteo")
-	meteo.load("demo")
-	meteo.analyse()
-	print("Maj bus")
-	bus.load()
 
 root = Tk()
 #larg = root.winfo_screenwidth()
@@ -67,10 +42,10 @@ dtJour = StringVar()
 hJour = StringVar()
 extTemp = StringVar()
 piscTemp = StringVar()
+sMeteoAuj = StringVar()
+sMeteoDem = StringVar()
 
-# Fonction de mise à jour des infos
-majMin()
-#maj10min()
+
 
 #import tkFont
 font=("Helvetica", 40,"bold")
@@ -82,6 +57,49 @@ labelTE = Label(root, textvariable=extTemp, fg="white", bg="black")
 labelTE.grid(row=2)
 labelTP = Label(root, textvariable=piscTemp, fg="white", bg="black")
 labelTP.grid(row=3)
+labelA = Label(root, text="Aujourd'hui", fg="white", bg="black")
+labelA.grid(row=5)
+textMetAuj = Text(root, fg="white", bg="black", height=4, borderwidth=0)
+textMetAuj.grid(row=6, sticky='w')
+labelA = Label(root, text="Demain", fg="white", bg="black")
+labelA.grid(row=7)
+textMetDem = Text(root, fg="white", bg="black", height=4, borderwidth=0)
+textMetDem.grid(row=8, sticky='w')
+
+# Fonctions de mise à jour des infos
+def majMin():
+	print("Màj")
+	dtJour.set(dt.nowStr())
+	hJour.set(dt.heure())
+	print("Màj tempExt")
+	tempExt.load()
+	print("Màj Retour")
+	derMesure =  tempExt.getField(0, "created_at")
+	dtIso = dt.dateFromISO(derMesure)
+	diff = dt.nowUTC() - dtIso
+	extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field1")), int(diff.total_seconds())//60))
+	piscTemp.set("piscine à {}°".format(float(tempExt.getField(0, "field2"))))
+	print("màj Fin")
+
+def maj10min():
+	global textMetAuj, textMetDem
+	print("Maj menu")
+	menuPhil.load()
+	print("Maj temp")
+	meteo.load("demo")
+	meteo.analyse()
+	textMetAuj.delete(1.0, 5.0)
+	print("index : ", textMetAuj.index(INSERT))
+	textMetAuj.insert(1.0, '\n'.join(meteo.duJour(0)))
+	textMetDem.delete(1.0, 5.0)
+	textMetDem.insert(1.0, '\n'.join(meteo.duJour(1)))
+	print("Maj bus")
+	bus.load()
+
+# Fonction de mise à jour des infos
+majMin()
+maj10min()
+
 
 root.title('Mirroir oh mon beau mirroir')
 if sys.platform.startswith("darwin"):		# sur mac
@@ -104,6 +122,7 @@ def readsensor():
 		tick = time.time()
 		maj10min()
 	majMin()
+	maj10min()
 	root.after(60000, readsensor)		# une minute
 
 root.after(2000, readsensor)
