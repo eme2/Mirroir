@@ -12,3 +12,7 @@ meteoKey = key_OpenWeatherMap
 idCts = id_CTS
 pwdCts =  mdp
 arretCts = code_arret
+
+# Infos mail pour le sendmail
+keyFrom = "xxx"
+keyTo = "yyy"
