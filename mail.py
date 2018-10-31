@@ -2,16 +2,17 @@
 # -*- coding: utf-8 -*-
 import datetime, os
 
+
 import thing, dateConv, openWeather, menuCantine, cts
 import time, sys
 from keys import *
 
-def sendMail(frm, to msg, title):
+def sendMail(frm, to, msg, title):
     sendmail_location = "/usr/sbin/sendmail" # sendmail location
     p = os.popen("%s -t" % sendmail_location, "w")
     p.write("From: %s\n" % frm)
     p.write("To: %s\n" % to)
-    p.write("Subject: %s\n", title)
+    p.write("Subject: %s\n" % title)
     p.write("\n") # blank line separating headers from body
     p.write(msg)
     p.write("...")    
@@ -47,8 +48,8 @@ addMsg(dt.heure())
 derMesure =  tempExt.getField(0, "created_at")
 dtIso = dt.dateFromISO(derMesure)
 diff = dt.nowUTC() - dtIso
-addMsg("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field1")), int(diff.total_seconds())//60))
-addMsg("piscine à {}°".format(float(tempExt.getField(0, "field2"))))
+addMsg("il fait {}Â° (il y a {} min)".format(float(tempExt.getField(0, "field1")), int(diff.total_seconds())//60))
+addMsg("piscine Ã  {}Â°".format(float(tempExt.getField(0, "field2"))))
 addMsg("------------------")
 addMsg("\nAUJOURD'HUI")
 addMsg('\n'.join(m.duJour(0)))
