@@ -8,17 +8,15 @@ class MenuCantine:
   def __init__(self):
     self.url = "http://eurometropole.apimobile.fr/LesMenus/Index/caf9f5a9-2f0c-4617-bca9-3ea37af1d54a?date="
     self.soup = None
-    self.menus = []
+    
     
   def load(self):
+    self.menus = []
     d = dateConv.DateConv()
  
     requete = requests.get(self.url+d.dateJourApi())
     page = requete.content
     self.soup = BeautifulSoup(page, 'html.parser')
-  
-
-  def lstMenu(self):
     dateMenu = self.soup.find('span', attrs={"class":"subtitle"})
     self.menus.append("menu du {}".format(dateMenu.text))
     d = self.soup.find(class_="dish-name")
@@ -31,4 +29,6 @@ class MenuCantine:
         menu = transition[j].find('span', attrs={"class":"intitule"})
         prix = transition[j].find('span', attrs={"class":"dish-price"})
         self.menus.append("{} - {}".format(menu.text, prix.text))
+
+  def lstMenu(self):
     return self.menus

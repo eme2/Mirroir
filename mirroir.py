@@ -48,23 +48,38 @@ sMeteoDem = StringVar()
 
 
 #import tkFont
+myRow = 0
 font=("Helvetica", 40,"bold")
 labelD = Label(root, textvariable=dtJour, fg="white", bg="black", font="Arial 20 bold")
-labelD.grid(row=0, sticky='w')
+labelD.grid(row=myRow, sticky='w')
+myRow += 1
 labelH = Label(root, textvariable=hJour, fg="white", bg="black")
-labelH.grid(row=1, sticky='w')
+labelH.grid(row=myRow, sticky='w')
+myRow += 1
 labelTE = Label(root, textvariable=extTemp, fg="white", bg="black")
-labelTE.grid(row=2)
+labelTE.grid(row=myRow)
+myRow += 1
 labelTP = Label(root, textvariable=piscTemp, fg="white", bg="black")
-labelTP.grid(row=3)
+labelTP.grid(row=myRow)
+myRow += 2
 labelA = Label(root, text="Aujourd'hui", fg="white", bg="black")
-labelA.grid(row=5)
-textMetAuj = Text(root, fg="white", bg="black", height=4, borderwidth=0)
-textMetAuj.grid(row=6, sticky='w')
+labelA.grid(row=myRow)
+myRow += 1
+textMetAuj = Text(root, fg="white", bg="black", height=4, borderwidth=0, highlightthickness=0)
+textMetAuj.grid(row=myRow, sticky='w')
+myRow += 1
 labelA = Label(root, text="Demain", fg="white", bg="black")
-labelA.grid(row=7)
-textMetDem = Text(root, fg="white", bg="black", height=4, borderwidth=0)
-textMetDem.grid(row=8, sticky='w')
+labelA.grid(row=myRow)
+myRow += 1
+textMetDem = Text(root, fg="white", bg="black", height=4, bd=0, highlightthickness=0)
+textMetDem.grid(row=myRow, sticky='w')
+myRow += 1
+labelM = Label(root, text="Menu Phil", fg="white", bg="black")
+labelM.grid(row=myRow)
+myRow += 1
+textApi = Text(root, fg="white", bg="black", height=6, borderwidth=0, highlightthickness=0)
+textApi.grid(row=myRow, sticky='w')
+myRow += 1
 
 # Fonctions de mise à jour des infos
 def majMin():
@@ -93,6 +108,11 @@ def maj10min():
 	textMetAuj.insert(1.0, '\n'.join(meteo.duJour(0)))
 	textMetDem.delete(1.0, 5.0)
 	textMetDem.insert(1.0, '\n'.join(meteo.duJour(1)))
+	textApi.delete(1.0, 6.20)
+	textApi.insert(1.0, '\n'.join(menuPhil.lstMenu()))
+	print("-----------------")
+	print('\n'.join(menuPhil.lstMenu()))
+	print("-----------------")
 	print("Maj bus")
 	bus.load()
 
