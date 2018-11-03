@@ -57,29 +57,35 @@ labelH = Label(root, textvariable=hJour, fg="white", bg="black")
 labelH.grid(row=myRow, sticky='w')
 myRow += 1
 labelTE = Label(root, textvariable=extTemp, fg="white", bg="black")
-labelTE.grid(row=myRow)
+labelTE.grid(row=myRow, sticky='w')
 myRow += 1
 labelTP = Label(root, textvariable=piscTemp, fg="white", bg="black")
-labelTP.grid(row=myRow)
-myRow += 2
-labelA = Label(root, text="Aujourd'hui", fg="white", bg="black")
-labelA.grid(row=myRow)
+labelTP.grid(row=myRow, sticky='w')
+myRow += 1
+print("row : ", myRow)
+labelA = Label(root, text="Météo du jour", fg="white", bg="black", font="Arial 14")
+labelA.grid(row=myRow, pady=20, sticky='w')
 myRow += 1
 textMetAuj = Text(root, fg="white", bg="black", height=4, borderwidth=0, highlightthickness=0)
 textMetAuj.grid(row=myRow, sticky='w')
 myRow += 1
 labelA = Label(root, text="Demain", fg="white", bg="black")
-labelA.grid(row=myRow)
+labelA.grid(row=myRow, sticky='w')
 myRow += 1
 textMetDem = Text(root, fg="white", bg="black", height=4, bd=0, highlightthickness=0)
 textMetDem.grid(row=myRow, sticky='w')
-myRow += 1
-labelM = Label(root, text="Menu Phil", fg="white", bg="black")
-labelM.grid(row=myRow)
+myRow += 2
+labelM = Label(root, text="Menu Phil", fg="white", bg="black", font="Arial 14")
+labelM.grid(row=myRow, pady=20, sticky='w')
 myRow += 1
 textApi = Text(root, fg="white", bg="black", height=6, borderwidth=0, highlightthickness=0)
 textApi.grid(row=myRow, sticky='w')
 myRow += 1
+labelB = Label(root, text="Bus", fg="white", bg="black", font="Arial 14")
+labelB.grid(row=myRow, pady=20, sticky='w')
+myRow += 1
+textBus = Text(root, fg="white", bg="black", height=7, bd=0, highlightthickness=0)
+textBus.grid(row=myRow, sticky='w')
 
 # Fonctions de mise à jour des infos
 def majMin():
@@ -94,6 +100,12 @@ def majMin():
 	diff = dt.nowUTC() - dtIso
 	extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field1")), int(diff.total_seconds())//60))
 	piscTemp.set("piscine à {}°".format(float(tempExt.getField(0, "field2"))))
+	bus.load()
+	textBus.delete(1.0, 7.40)
+	textBus.insert(1.0, '\n'.join(bus.horaires()))
+	print("-------------")
+	print('\n'.join(bus.horaires()))
+	print("-------------")
 	print("màj Fin")
 
 def maj10min():
@@ -113,8 +125,7 @@ def maj10min():
 	print("-----------------")
 	print('\n'.join(menuPhil.lstMenu()))
 	print("-----------------")
-	print("Maj bus")
-	bus.load()
+	
 
 # Fonction de mise à jour des infos
 majMin()
