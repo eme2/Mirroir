@@ -36,23 +36,30 @@ class Cts:
         </soap:Body>
         </soap:Envelope>""" 
         self.tree = None
+        self.ret = None
 
     def load(self):
-        print("Horaires de ", self.dt.heure())
+        #print("Horaires de ", self.dt.heure())
         body = self.body1 + str(self.dt.heure()) + self.body2
-        response = requests.post(self.url,data=body,headers=self.headers)
-        monXml = str(response.content)
-        deb = monXml.find("<ListeArrivee>")
-        fin = monXml.find("</ListeArrivee>")
-        coeurXml = monXml[deb:fin+15]
+        try:
+            response = requests.post(self.url,data=body,headers=self.headers, timeout=10)
+            self.ret = response.status_code
+            monXml = str(response.content)
+            deb = monXml.find("<ListeArrivee>")
+            fin = monXml.find("</ListeArrivee>")
+            coeurXml = monXml[deb:fin+15]
 
-        self.tree = ET.fromstring(coeurXml)
+            self.tree = ET.fromstring(coeurXml)
+        except:
+            self.ret = response.status_code
         #print(etree.tostring(etree.getroot()))
         #tree.xpath("/ListeArrivee/Arrivee[Destination='L6 Pont phario']"))
         #print(tree.xpath("/ListeArrivee/Arrivee[Destination='L6 Pont phario']"))
         #arrivees = tree.getroot()
 
     def horaires(self):
+        if self.ret != 200:
+            return([])
         ret = []
         for node in self.tree.findall("Arrivee"):
             h = node.find("Horaire").text

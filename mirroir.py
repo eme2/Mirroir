@@ -9,7 +9,6 @@ from keys import *
 
 # Temps initial en secondes
 tick = time.time()
-print("Tick : ", tick)
 
 
 # Initialisation des sources
@@ -62,7 +61,6 @@ myRow += 1
 labelTP = Label(root, textvariable=piscTemp, fg="white", bg="black")
 labelTP.grid(row=myRow, sticky='w')
 myRow += 1
-print("row : ", myRow)
 labelA = Label(root, text="Météo du jour", fg="white", bg="black", font="Arial 14")
 labelA.grid(row=myRow, pady=20, sticky='w')
 myRow += 1
@@ -89,42 +87,33 @@ textBus.grid(row=myRow, sticky='w')
 
 # Fonctions de mise à jour des infos
 def majMin():
-	print("Màj")
 	dtJour.set(dt.nowStr())
 	hJour.set(dt.heure())
-	print("Màj tempExt")
 	tempExt.load()
-	print("Màj Retour")
 	derMesure =  tempExt.getField(0, "created_at")
-	dtIso = dt.dateFromISO(derMesure)
-	diff = dt.nowUTC() - dtIso
+	try:
+		dtIso = dt.dateFromISO(derMesure)
+		diff = dt.nowUTC() - dtIso
+	except:
+		diff = "-1"
+	
 	extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field1")), int(diff.total_seconds())//60))
 	piscTemp.set("piscine à {}°".format(float(tempExt.getField(0, "field2"))))
 	bus.load()
 	textBus.delete(1.0, 7.40)
 	textBus.insert(1.0, '\n'.join(bus.horaires()))
-	print("-------------")
-	print('\n'.join(bus.horaires()))
-	print("-------------")
-	print("màj Fin")
 
 def maj10min():
 	global textMetAuj, textMetDem
-	print("Maj menu")
 	menuPhil.load()
-	print("Maj temp")
-	meteo.load("demo")
+	meteo.load("demo")			####### A MODIFIER EN PROD
 	meteo.analyse()
 	textMetAuj.delete(1.0, 5.0)
-	print("index : ", textMetAuj.index(INSERT))
 	textMetAuj.insert(1.0, '\n'.join(meteo.duJour(0)))
 	textMetDem.delete(1.0, 5.0)
 	textMetDem.insert(1.0, '\n'.join(meteo.duJour(1)))
 	textApi.delete(1.0, 6.20)
 	textApi.insert(1.0, '\n'.join(menuPhil.lstMenu()))
-	print("-----------------")
-	print('\n'.join(menuPhil.lstMenu()))
-	print("-----------------")
 	
 
 # Fonction de mise à jour des infos
@@ -148,12 +137,11 @@ root.configure(background="black")
 
 def readsensor():
 	global tick
-	print("dans readsensor, tick : ", tick)
 	if time.time() - 600 > tick:
 		tick = time.time()
 		maj10min()
 	majMin()
-	maj10min()
+	#maj10min()
 	root.after(60000, readsensor)		# une minute
 
 root.after(2000, readsensor)

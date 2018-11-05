@@ -42,7 +42,7 @@ class Thing:
     if self.ret == 200:
       return(self.data['feeds'][offset][field])
     else:
-      return("")
+      return(-1)
     
   
     

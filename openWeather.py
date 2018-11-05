@@ -17,18 +17,26 @@ class OWM:
         self.t = None
         self.moment = {"matin":" 06:00:00", "midi":" 12:00:00", "soir":" 18:00:00", "znuit": " 21:00:00"}
         self.demo = None
+        self.ret = None
 
     def load(self, mode):
         if mode == "demo":
             self.demo = True
             self.loadDemo()
-            return(200)
-        resp = requests.get(self.url)
-        monJsonUtf = resp.content 
-        monJson = monJsonUtf.decode("utf-8") 
- 
-        self.data = json.loads(monJson)
-        return(int(self.data['cod']))
+            self.ret = 200
+            return(self.ret)
+        headers = { 'Accept':'text/html', 'Accept-Encoding': '', 'User-Agent': None } 
+        try:
+            resp = requests.get(self.url, headers=headers, timeout=10)
+            self.ret = resp.status_code
+            monJsonUtf = resp.content 
+            monJson = monJsonUtf.decode("utf-8") 
+    
+            self.data = json.loads(monJson)
+            return(int(self.data['cod']))
+        except:
+            self.ret = resp.status_code
+            return(self.ret)
 
     def loadDemo(self):
         str = """
@@ -38,23 +46,28 @@ class OWM:
         return(int(self.data['cod']))
 
     def liste(self):
+        if self.ret != 200:
+            print("erreur de chargement")
+            return
         for l in range(self.data['cnt']):
             li = self.data['list'][l]
             print(li['dt_txt'], str(li['main']['temp'])+"°", li['weather'][0]['description'])
 
-    def jour(self):
-        jour = "2018-10-00"
-        d = {}
-        for l in range(self.data['cnt']):
-            li = self.data['list'][l]
-            jour = li['dt_txt'][:10]
-            if jour in d:
-                d[jour].append(li['main']['temp'])
-            else:
-                d[jour] = [li['main']['temp']]
-        return d
+    # def jour(self):
+    #     jour = "2018-10-00"
+    #     d = {}
+    #     for l in range(self.data['cnt']):
+    #         li = self.data['list'][l]
+    #         jour = li['dt_txt'][:10]
+    #         if jour in d:
+    #             d[jour].append(li['main']['temp'])
+    #         else:
+    #             d[jour] = [li['main']['temp']]
+    #     return d
 
     def analyse(self):
+        if self.ret != 200:
+            return
         self.t = {}
         # Recup du temps dans le dico self.t indexe par la date et l'heure
         for l in range(self.data['cnt']):
@@ -64,7 +77,8 @@ class OWM:
 
     def duJour(self, offset):
         if self.t is None:
-            return
+            print("None")
+            return([])
 
         dt = datetime.datetime.now()
         dt = dt + datetime.timedelta(offset)
@@ -76,8 +90,9 @@ class OWM:
             else:
                 dts = "2018-10-02"
             print("mode demo : ", dts)
-
-        ret = []
+            ret = ["demo"]
+        else:
+            ret = []
         for periode, heure in self.moment.items():
             moment_heure = dts+heure
         
@@ -85,33 +100,33 @@ class OWM:
                 ret.append("{} : {}".format(periode,self.t[moment_heure]))
         return(sorted(ret))
         
-    def temps2J(self):
-        self.t = {}
-        dt = datetime.datetime.now()
-        dt1s = dt.strftime("%Y-%m-%d")
-        dt2 = dt + datetime.timedelta(1)
-        dt2s = dt2.strftime("%Y-%m-%d")
-        print("dates : ", dt1s, dt2s)
-        for l in range(self.data['cnt']):
-            li = self.data['list'][l]
-            dat = datetime.datetime.fromtimestamp(li['dt'])
-            self.t[li['dt_txt']] = "{} ({}°)".format(li['weather'][0]['description'],li['main']['temp'])
-            #print(dat, joursem)
-            #### récupérer le temps du matin , midi et soir
-            #### ainsi que la pluie possible
-        today = datetime.datetime.now()
-        # afficher aujourd'hui et demain
-        today_txt = today.strftime('%Y-%m-%d')
-        #for key, value in self.t.items():
-        #    print(key, value)
-        ret = []
-        dt1s = "2018-10-02"         ####### a supprimer ensuite
-        matin = dt1s + " 06:00:00"
-        if matin in self.t:
-            ret.append(self.t[matin])
-            print(ret)
-        else:
-            print(matin, "non trouvé")
+    # def temps2J(self):
+    #     self.t = {}
+    #     dt = datetime.datetime.now()
+    #     dt1s = dt.strftime("%Y-%m-%d")
+    #     dt2 = dt + datetime.timedelta(1)
+    #     dt2s = dt2.strftime("%Y-%m-%d")
+    #     print("dates : ", dt1s, dt2s)
+    #     for l in range(self.data['cnt']):
+    #         li = self.data['list'][l]
+    #         dat = datetime.datetime.fromtimestamp(li['dt'])
+    #         self.t[li['dt_txt']] = "{} ({}°)".format(li['weather'][0]['description'],li['main']['temp'])
+    #         #print(dat, joursem)
+    #         #### récupérer le temps du matin , midi et soir
+    #         #### ainsi que la pluie possible
+    #     today = datetime.datetime.now()
+    #     # afficher aujourd'hui et demain
+    #     today_txt = today.strftime('%Y-%m-%d')
+    #     #for key, value in self.t.items():
+    #     #    print(key, value)
+    #     ret = []
+    #     dt1s = "2018-10-02"         ####### a supprimer ensuite
+    #     matin = dt1s + " 06:00:00"
+    #     if matin in self.t:
+    #         ret.append(self.t[matin])
+    #         print(ret)
+    #     else:
+    #         print(matin, "non trouvé")
 
 
 
