@@ -34,7 +34,7 @@ class DateConv:
 
     j = self.jourSem()
 
-    if j >= 5:    # afficher menu du lundi
+    if j > 5:    # afficher menu du lundi
       offset = 1 - j + 7
     elif d.hour > 12:
       offset = 1

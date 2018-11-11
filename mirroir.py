@@ -1,18 +1,28 @@
 #!/usr/bin/env python 
 # -*- coding: utf-8 -*-
 
-import thing, dateConv, openWeather, menuCantine, cts
-import tkinter, time
+# TODO
+# ajouter la date du menu SteClo, l'indcateur mail et portail.
+
+import thing, dateConv, openWeather, menuCantine, cts, menuSteClo
+import tkinter, time, sys
 from tkinter import *
 from keys import *
 
 
 # Temps initial en secondes
 tick = time.time()
+tick10 = tick
+tick6h = tick
 
-
+if len(sys.argv) > 1:
+	mode = "prod"
+else:
+	mode = "demo"
+print("Mode : ", mode)
 # Initialisation des sources
 menuPhil = menuCantine.MenuCantine()
+menuOscar = menuSteClo.MenuSteClo()
 tempExt = thing.Thing(keyPiscine,1)
 portail = thing.Thing(keyPortail,1)
 meteo = openWeather.OWM(meteoKey)
@@ -24,7 +34,7 @@ dt = dateConv.DateConv()
 root = Tk()
 #larg = root.winfo_screenwidth()
 #haut = root.winfo_screenheight()
-larg = 1280
+larg = 1280		# Dimensions de l'écran 19''
 haut = 1024
 
 # highlightthinkness=0 pour éviter la bordure
@@ -82,7 +92,7 @@ myRow += 1
 labelB = Label(root, text="Bus", fg="white", bg="black", font="Arial 14")
 labelB.grid(row=myRow, pady=20, sticky='w')
 myRow += 1
-textBus = Text(root, fg="white", bg="black", height=7, bd=0, highlightthickness=0)
+textBus = Text(root, fg="white", bg="black", height=10, bd=0, highlightthickness=0)
 textBus.grid(row=myRow, sticky='w')
 
 # Fonctions de mise à jour des infos
@@ -104,9 +114,9 @@ def majMin():
 	textBus.insert(1.0, '\n'.join(bus.horaires()))
 
 def maj10min():
-	global textMetAuj, textMetDem
+	global textMetAuj, textMetDem, mode
 	menuPhil.load()
-	meteo.load("demo")			####### A MODIFIER EN PROD
+	meteo.load(mode)
 	meteo.analyse()
 	textMetAuj.delete(1.0, 5.0)
 	textMetAuj.insert(1.0, '\n'.join(meteo.duJour(0)))
@@ -115,10 +125,13 @@ def maj10min():
 	textApi.delete(1.0, 6.20)
 	textApi.insert(1.0, '\n'.join(menuPhil.lstMenu()))
 	
+def maj6h():
+	pass
 
 # Fonction de mise à jour des infos
 majMin()
 maj10min()
+maj6h()
 
 
 root.title('Mirroir oh mon beau mirroir')
@@ -136,12 +149,15 @@ root.configure(background="black")
 #Label(root, text="22 °C")
 
 def readsensor():
-	global tick
-	if time.time() - 600 > tick:
-		tick = time.time()
+	global tick10, tick6h				# un tick par seconde
+	tick = time.time()
+	if tick - 36000 > tick6h:
+		tick6h = tick
+	if tick - 600 > tick10:
+		tick10 = tick
 		maj10min()
 	majMin()
-	#maj10min()
+
 	root.after(60000, readsensor)		# une minute
 
 root.after(2000, readsensor)

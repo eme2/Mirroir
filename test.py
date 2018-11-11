@@ -1,7 +1,7 @@
 #!/usr/bin/env python 
 # -*- coding: utf-8 -*-
 
-import thing, dateConv, openWeather, menuCantine, cts
+import thing, dateConv, openWeather, menuCantine, cts, menuSteClo
 import time, sys
 from keys import *
 
@@ -9,7 +9,9 @@ print("Exécution sur : ", sys.platform)
 deb = time.time()
 menuPhil = menuCantine.MenuCantine()
 menuPhil.load()
-
+menuOscar = menuSteClo.MenuSteClo()
+menuOscar.load()
+menuOscar.crop()
 tempExt = thing.Thing(keyPiscine,1)
 portail = thing.Thing(keyPortail,1)
 tempExt.load()
@@ -67,7 +69,7 @@ print("Update Portail (min) : ", int(diffPortail.total_seconds())//60 )
 
 
 print("retour ", m.loadDemo())
-d = m.jour()
+d = m.duJour(0)
 
 print(type(d))
 print("Terminé en ", time.time() - deb)
