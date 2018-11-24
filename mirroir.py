@@ -101,14 +101,14 @@ def majMin():
 	hJour.set(dt.heure())
 	tempExt.load()
 	derMesure =  tempExt.getField(0, "created_at")
-	try:
+	if derMesure != -1:
 		dtIso = dt.dateFromISO(derMesure)
 		diff = dt.nowUTC() - dtIso
-	except:
+	else:
 		diff = "-1"
 	
-	extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field1")), int(diff.total_seconds())//60))
-	piscTemp.set("piscine à {}°".format(float(tempExt.getField(0, "field2"))))
+	extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field2")), int(diff.total_seconds())//60))
+	piscTemp.set("cabane à {}°".format(float(tempExt.getField(0, "field1"))))
 	bus.load()
 	textBus.delete(1.0, 7.40)
 	textBus.insert(1.0, '\n'.join(bus.horaires()))

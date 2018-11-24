@@ -18,7 +18,7 @@ class Thing:
     try:
         resp = requests.get(self.url, headers= headers, timeout=10)
     except:
-        self.ret = resp.status_code
+        self.ret = -1
         return
     self.ret = resp.status_code
     monJsonUtf = resp.content 
