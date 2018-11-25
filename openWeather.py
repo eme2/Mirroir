@@ -35,7 +35,7 @@ class OWM:
             self.data = json.loads(monJson)
             return(int(self.data['cod']))
         except:
-            self.ret = resp.status_code
+            self.ret = -1
             return(self.ret)
 
     def loadDemo(self):
@@ -47,7 +47,7 @@ class OWM:
 
     def liste(self):
         if self.ret != 200:
-            print("erreur de chargement")
+            print("openWeather : erreur de chargement")
             return
         for l in range(self.data['cnt']):
             li = self.data['list'][l]

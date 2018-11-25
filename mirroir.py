@@ -105,7 +105,7 @@ def majMin():
 		dtIso = dt.dateFromISO(derMesure)
 		diff = dt.nowUTC() - dtIso
 	else:
-		diff = "-1"
+		diff = -1
 	
 	extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field2")), int(diff.total_seconds())//60))
 	piscTemp.set("cabane à {}°".format(float(tempExt.getField(0, "field1"))))
