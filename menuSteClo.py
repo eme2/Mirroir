@@ -11,6 +11,7 @@ class MenuSteClo:
         self.jourSem = 0
         self.ret = -1
         self.resp = None
+        self.jours = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"]
         
     def load(self):
         dt = dateConv.DateConv()
@@ -48,6 +49,9 @@ class MenuSteClo:
 
     def lstMenu(self):
         pass
+
+    def dateMenu(self):
+        return "{} semaine {}".format(self.jours[self.jourSem - 1], self.sem)
 
     def crop(self):
         ImageFile.LOAD_TRUNCATED_IMAGES = True

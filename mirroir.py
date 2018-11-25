@@ -3,6 +3,8 @@
 
 # TODO
 # ajouter la date du menu SteClo, l'indcateur mail et portail.
+# 25/11 : pb d'affichage du menu steClo : comment modifier l'image ?
+# 	elle n'est pas prise en compte dans la fonction... manque un pack ?
 
 import thing, dateConv, openWeather, menuCantine, cts, menuSteClo
 import tkinter, time, sys
@@ -37,14 +39,23 @@ root = Tk()
 larg = 1280		# Dimensions de l'écran 19''
 haut = 1024
 
-# highlightthinkness=0 pour éviter la bordure
-canvas = Canvas(root, width=140, height=400, background='black', highlightthickness=0)
-#txt1 = canvas.create_text(75,75, text="Cible", font="Arial 16 italic", fill="blue")
-photo = PhotoImage(file="invert.gif")
-canvas.create_image(0,0,anchor=NW, image=photo)
+#----------test 
+menuOscar.load()
+#s = menuOscar.dateMenu()
+canvas = Canvas(root, width=140, height=450, background='black', highlightthickness=1)
+photo = PhotoImage(file='invert.gif')
+print(photo)
+r = canvas.create_image(0,20,anchor=NW, image=photo)
+#r = canvas.create_image(0,20,image=photo)
+print("retour : ", r)
 #canvas.grid(row=0, sticky='e')
 offset = larg - 150
-canvas.place(x=offset, y=0)
+canvas.place(x=offset, y=30)
+#print("Menu Oscar : ", s)
+#dtMenu.set(menuOscar.dateMenu())
+#menuOscar.crop()
+time.sleep(3)
+#----------test 
 
 # Variables tkinter
 dtJour = StringVar()
@@ -53,6 +64,8 @@ extTemp = StringVar()
 piscTemp = StringVar()
 sMeteoAuj = StringVar()
 sMeteoDem = StringVar()
+dtMenu = StringVar()
+
 
 
 
@@ -61,6 +74,12 @@ myRow = 0
 font=("Helvetica", 40,"bold")
 labelD = Label(root, textvariable=dtJour, fg="white", bg="black", font="Arial 20 bold")
 labelD.grid(row=myRow, sticky='w')
+
+labelMo = Label(root, textvariable=dtMenu, fg="white", bg="black")
+#labelMo.grid(row=myRow, column=1, sticky='e')
+labelMo.grid(row=myRow,  sticky='w')
+
+
 myRow += 1
 labelH = Label(root, textvariable=hJour, fg="white", bg="black")
 labelH.grid(row=myRow, sticky='w')
@@ -104,11 +123,13 @@ def majMin():
 	if derMesure != -1:
 		dtIso = dt.dateFromISO(derMesure)
 		diff = dt.nowUTC() - dtIso
+		extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field2")), int(diff.total_seconds())//60))
+		piscTemp.set("cabane à {}°".format(float(tempExt.getField(0, "field1"))))
 	else:
 		diff = -1
+		extTemp.set("Pb de lecture de la température")
+		piscTemp.set("------")
 	
-	extTemp.set("il fait {}° (il y a {} min)".format(float(tempExt.getField(0, "field2")), int(diff.total_seconds())//60))
-	piscTemp.set("cabane à {}°".format(float(tempExt.getField(0, "field1"))))
 	bus.load()
 	textBus.delete(1.0, 7.40)
 	textBus.insert(1.0, '\n'.join(bus.horaires()))
@@ -126,7 +147,20 @@ def maj10min():
 	textApi.insert(1.0, '\n'.join(menuPhil.lstMenu()))
 	
 def maj6h():
-	pass
+	global root, larg, dtMenu, canvas
+	#menuOscar.load()
+	s = menuOscar.dateMenu()
+	#menuOscar.crop()
+	# highlightthinkness=0 pour éviter la bordure
+	txt1 = canvas.create_text(60,10, text=s, font="Arial 12 italic", fill="white")
+	photo = PhotoImage(file='jour.gif')
+	print(photo)
+#	r = canvas.create_image(0,20,anchor=NW, image=photo)
+	r = canvas.create_image(0,20,image=photo)
+	print("retour : ", r)
+	#canvas.grid(row=0, sticky='e')
+	offset = larg - 150
+	canvas.place(x=offset, y=30)
 
 # Fonction de mise à jour des infos
 majMin()
