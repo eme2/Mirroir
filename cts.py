@@ -51,7 +51,7 @@ class Cts:
 
             self.tree = ET.fromstring(coeurXml)
         except:
-            self.ret = response.status_code
+            self.ret = -1
         #print(etree.tostring(etree.getroot()))
         #tree.xpath("/ListeArrivee/Arrivee[Destination='L6 Pont phario']"))
         #print(tree.xpath("/ListeArrivee/Arrivee[Destination='L6 Pont phario']"))

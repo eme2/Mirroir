@@ -15,9 +15,9 @@ larg = 1280		# Dimensions de l'écran 19''
 haut = 1024
 
 #----------test 
-menuOscar = menuSteClo.MenuSteClo()
+menuOscar = menuSteClo.MenuSteClo() 
 menuOscar.load()
-s = menuOscar.dateMenu()
+s = menuOscar.dateMenu()            #
 
 canvas = Canvas(root, width=140, height=450, background='black', highlightthickness=1)
 photo1 = PhotoImage(file='invert.gif')
@@ -47,7 +47,8 @@ def changeImage():
     global i, photo1, photo2, canvas, larg, id_image, txt
     if i == 1:
         i=2
-        r = canvas.itemconfigure(id_image, image=photo2)
+        photo_2 = PhotoImage(file='noImage.gif')
+        r = canvas.itemconfigure(id_image, image=photo_2)
         canvas.itemconfigure(txt, text="la deuxieme")
     else:
         i=1

@@ -5,6 +5,7 @@
 # ajouter la date du menu SteClo, l'indcateur mail et portail.
 # 25/11 : pb d'affichage du menu steClo : comment modifier l'image ?
 # 	elle n'est pas prise en compte dans la fonction... manque un pack ?
+# => l'image ne semble pas pouvoir être modifiée une fois la boucle lancée... Redémarrer
 
 import thing, dateConv, openWeather, menuCantine, cts, menuSteClo
 import tkinter, time, sys
@@ -39,23 +40,29 @@ root = Tk()
 larg = 1280		# Dimensions de l'écran 19''
 haut = 1024
 
-#----------test 
+# Mise en place du Canevas et d'une image d'attente
+
+canvas = Canvas(root, width=140, height=550, background='black', highlightthickness=0)
+#noPhoto = PhotoImage(file='noImage.gif')
 menuOscar.load()
-#s = menuOscar.dateMenu()
-canvas = Canvas(root, width=140, height=450, background='black', highlightthickness=1)
+s = menuOscar.dateMenu()
+
+menuOscar.crop()
+noImage = PhotoImage(file='noImage.gif')
+#print("photo : ", photo)
+
+#print("photo 2 : ", photo_2)
+#r = canvas.itemconfigure(id_image, image=photo)
+#canvas.itemconfigure(txt_image, text=s)
 photo = PhotoImage(file='invert.gif')
-print(photo)
-r = canvas.create_image(0,20,anchor=NW, image=photo)
-#r = canvas.create_image(0,20,image=photo)
-print("retour : ", r)
-#canvas.grid(row=0, sticky='e')
+mail = PhotoImage(file='mail.gif')
+id_image = canvas.create_image(0,20,anchor=NW, image=photo)
+id_mail = canvas.create_image(0,450,anchor=NW, image=None)
+
+txt_image = canvas.create_text(60,10, text=s, font="Arial 12 italic", fill="white")
+
 offset = larg - 150
 canvas.place(x=offset, y=30)
-#print("Menu Oscar : ", s)
-#dtMenu.set(menuOscar.dateMenu())
-#menuOscar.crop()
-time.sleep(3)
-#----------test 
 
 # Variables tkinter
 dtJour = StringVar()
@@ -64,21 +71,11 @@ extTemp = StringVar()
 piscTemp = StringVar()
 sMeteoAuj = StringVar()
 sMeteoDem = StringVar()
-dtMenu = StringVar()
 
-
-
-
-#import tkFont
 myRow = 0
 font=("Helvetica", 40,"bold")
 labelD = Label(root, textvariable=dtJour, fg="white", bg="black", font="Arial 20 bold")
 labelD.grid(row=myRow, sticky='w')
-
-labelMo = Label(root, textvariable=dtMenu, fg="white", bg="black")
-#labelMo.grid(row=myRow, column=1, sticky='e')
-labelMo.grid(row=myRow,  sticky='w')
-
 
 myRow += 1
 labelH = Label(root, textvariable=hJour, fg="white", bg="black")
@@ -116,6 +113,8 @@ textBus.grid(row=myRow, sticky='w')
 
 # Fonctions de mise à jour des infos
 def majMin():
+	global mail, id_mail, canvas
+	print("majMin...")
 	dtJour.set(dt.nowStr())
 	hJour.set(dt.heure())
 	tempExt.load()
@@ -134,8 +133,18 @@ def majMin():
 	textBus.delete(1.0, 7.40)
 	textBus.insert(1.0, '\n'.join(bus.horaires()))
 
+	portail.load()
+	isMail = portail.getField(0, "field5")
+	print("BAL : ", isMail)  # -1 si erreur de lecture
+	if isMail == 1:
+		canvas.itemconfigure(id_mail, image=mail)
+	else:
+		canvas.itemconfigure(id_mail, image=None)
+
+
 def maj10min():
 	global textMetAuj, textMetDem, mode
+	print("maj10Min...")
 	menuPhil.load()
 	meteo.load(mode)
 	meteo.analyse()
@@ -147,25 +156,27 @@ def maj10min():
 	textApi.insert(1.0, '\n'.join(menuPhil.lstMenu()))
 	
 def maj6h():
-	global root, larg, dtMenu, canvas
-	#menuOscar.load()
+	global canvas, txt_image, id_image, menuOscar, photo, offset
+	return
+	print("maj6h...")
+
+	menuOscar.load()
 	s = menuOscar.dateMenu()
-	#menuOscar.crop()
-	# highlightthinkness=0 pour éviter la bordure
-	txt1 = canvas.create_text(60,10, text=s, font="Arial 12 italic", fill="white")
-	photo = PhotoImage(file='jour.gif')
-	print(photo)
-#	r = canvas.create_image(0,20,anchor=NW, image=photo)
-	r = canvas.create_image(0,20,image=photo)
-	print("retour : ", r)
-	#canvas.grid(row=0, sticky='e')
-	offset = larg - 150
+
+	menuOscar.crop()
+	photo_2 = PhotoImage(file='noImage.gif')
+	print("photo : ", photo)
+
+	print("photo 2 : ", photo_2)
+	r = canvas.itemconfigure(id_image, image=photo_2)
+	canvas.itemconfigure(txt_image, text=s)
 	canvas.place(x=offset, y=30)
+	
 
 # Fonction de mise à jour des infos
 majMin()
 maj10min()
-maj6h()
+#maj6h()
 
 
 root.title('Mirroir oh mon beau mirroir')
@@ -187,14 +198,17 @@ def readsensor():
 	tick = time.time()
 	if tick - 36000 > tick6h:
 		tick6h = tick
+		#maj6h()
 	if tick - 600 > tick10:
 		tick10 = tick
 		maj10min()
 	majMin()
+	maj6h()
+
 
 	root.after(60000, readsensor)		# une minute
 
-root.after(2000, readsensor)
+root.after(10000, readsensor)
 
 root.mainloop()
 
