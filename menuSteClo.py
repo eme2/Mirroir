@@ -33,7 +33,7 @@ class MenuSteClo:
         try:
             self.resp = requests.get(url, headers= headers, timeout=10)
         except:
-            self.ret = self.resp.status_code
+            self.ret = -1
             return
         self.ret = self.resp.status_code
         print("Apres requests ", self.ret)

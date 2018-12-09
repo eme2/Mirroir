@@ -6,6 +6,7 @@
 # 25/11 : pb d'affichage du menu steClo : comment modifier l'image ?
 # 	elle n'est pas prise en compte dans la fonction... manque un pack ?
 # => l'image ne semble pas pouvoir être modifiée une fois la boucle lancée... Redémarrer
+# test de la présence de courrier
 
 import thing, dateConv, openWeather, menuCantine, cts, menuSteClo
 import tkinter, time, sys
@@ -189,7 +190,7 @@ def clic(t):
 root.bind("<1>", clic)
 root.bind("<Escape>", exit)
 
-root.configure(background="black")
+root.configure(background="black", cursor="none")
 #fnt = Font(family="Helvetica", size=128, weight='bold')
 #Label(root, text="22 °C")
 
