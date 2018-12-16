@@ -70,7 +70,7 @@ txt_image = canvas.create_text(60,10, text=s, font="Arial 12 italic", fill="whit
 
 offset = larg - 150
 canvas.place(x=offset, y=30)
-canvas2.place(x=500, y=700)
+canvas2.place(x=500, y=600)
 
 # Variables tkinter
 dtJour = StringVar()
