@@ -44,6 +44,7 @@ haut = 1024
 # Mise en place du Canevas et d'une image d'attente
 
 canvas = Canvas(root, width=140, height=550, background='black', highlightthickness=0)
+canvas2 = Canvas(root, width=220, height=60, background='black', highlightthickness=0)
 #noPhoto = PhotoImage(file='noImage.gif')
 menuOscar.load()
 s = menuOscar.dateMenu()
@@ -57,13 +58,19 @@ noImage = PhotoImage(file='noImage.gif')
 #canvas.itemconfigure(txt_image, text=s)
 photo = PhotoImage(file='invert.gif')
 mail = PhotoImage(file='mail.gif')
+ouvert = PhotoImage(file='ouvert.gif')
+ferme = PhotoImage(file='ferme.gif')
 id_image = canvas.create_image(0,20,anchor=NW, image=photo)
-id_mail = canvas.create_image(0,450,anchor=NW, image=None)
+
+
+id_mail = canvas2.create_image(0,0, anchor=NW, image=None)
+id_portail = canvas2.create_image(140,0, anchor=NW, image=ferme)
 
 txt_image = canvas.create_text(60,10, text=s, font="Arial 12 italic", fill="white")
 
 offset = larg - 150
 canvas.place(x=offset, y=30)
+canvas2.place(x=500, y=700)
 
 # Variables tkinter
 dtJour = StringVar()
@@ -114,7 +121,7 @@ textBus.grid(row=myRow, sticky='w')
 
 # Fonctions de mise à jour des infos
 def majMin():
-	global mail, id_mail, canvas
+	global mail, id_mail, id_portail, canvas, canvas2
 	print("majMin...")
 	dtJour.set(dt.nowStr())
 	hJour.set(dt.heure())
@@ -138,9 +145,9 @@ def majMin():
 	isMail = portail.getField(0, "field5")
 	print("BAL : ", isMail)  # -1 si erreur de lecture
 	if isMail == 1:
-		canvas.itemconfigure(id_mail, image=mail)
+		canvas2.itemconfigure(id_mail, image=mail)
 	else:
-		canvas.itemconfigure(id_mail, image=None)
+		canvas2.itemconfigure(id_mail, image=None)
 
 
 def maj10min():
@@ -157,27 +164,21 @@ def maj10min():
 	textApi.insert(1.0, '\n'.join(menuPhil.lstMenu()))
 	
 def maj6h():
-	global canvas, txt_image, id_image, menuOscar, photo, offset
-	return
-	print("maj6h...")
-
+	#global canvas, txt_image, id_image, menuOscar, photo, offset
+	global canvas, id_image, menuOscar
+	print("maj6h....")
 	menuOscar.load()
 	s = menuOscar.dateMenu()
-
 	menuOscar.crop()
-	photo_2 = PhotoImage(file='noImage.gif')
-	print("photo : ", photo)
-
-	print("photo 2 : ", photo_2)
-	r = canvas.itemconfigure(id_image, image=photo_2)
-	canvas.itemconfigure(txt_image, text=s)
-	canvas.place(x=offset, y=30)
+	img2 = PhotoImage(file="invert.gif")
+	canvas.itemconfigure(id_image, image=img2)
+	canvas.image = img2
 	
 
 # Fonction de mise à jour des infos
 majMin()
 maj10min()
-#maj6h()
+maj6h()
 
 
 root.title('Mirroir oh mon beau mirroir')
