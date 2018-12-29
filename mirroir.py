@@ -1,12 +1,9 @@
 #!/usr/bin/env python 
 # -*- coding: utf-8 -*-
 
-# TODO
-# ajouter la date du menu SteClo, l'indcateur mail et portail.
-# 25/11 : pb d'affichage du menu steClo : comment modifier l'image ?
-# 	elle n'est pas prise en compte dans la fonction... manque un pack ?
-# => l'image ne semble pas pouvoir être modifiée une fois la boucle lancée... Redémarrer
-# test de la présence de courrier
+# TODO: Ne pas effacer les précédentes infos en cas d'erreur réseau (mémoriser les infos)
+# TODO Faire rebooter le pi chaque nuit
+# TODO Intégrer un détecteur de présence pour activer l'affichage, sinon éteindre l'écran
 
 import thing, dateConv, openWeather, menuCantine, cts, menuSteClo
 import tkinter, time, sys
