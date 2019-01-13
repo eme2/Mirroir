@@ -55,6 +55,7 @@ noImage = PhotoImage(file='noImage.gif')
 #canvas.itemconfigure(txt_image, text=s)
 photo = PhotoImage(file='invert.gif')
 mail = PhotoImage(file='mail.gif')
+nomail = PhotoImage(file='nomail.gif')
 ouvert = PhotoImage(file='ouvert.gif')
 ferme = PhotoImage(file='ferme.gif')
 id_image = canvas.create_image(0,20,anchor=NW, image=photo)
@@ -142,9 +143,10 @@ def majMin():
 	portail.load()
 	isMail = portail.getField(0, "field5")
 	if isMail == "1":
+		print("Courrier !!!")
 		canvas2.itemconfigure(id_mail, image=mail)
 	else:
-		canvas2.itemconfigure(id_mail, image=None)
+		canvas2.itemconfigure(id_mail, image=nomail)
 	isOuvert = portail.getField(0, "field1")
 	if isOuvert == "1":
 		canvas2.itemconfigure(id_portail, image=ouvert)
