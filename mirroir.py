@@ -63,7 +63,7 @@ id_image = canvas.create_image(0,20,anchor=NW, image=photo)
 id_mail = canvas2.create_image(0,0, anchor=NW, image=None)
 id_portail = canvas2.create_image(140,0, anchor=NW, image=ferme)
 
-txt_image = canvas.create_text(60,10, text=s, font="Arial 12 italic", fill="white")
+txt_image = canvas.create_text(60,10, text=s, font="Arial 10 italic", fill="white")
 
 offset = larg - 150
 canvas.place(x=offset, y=30)
@@ -145,6 +145,12 @@ def majMin():
 		canvas2.itemconfigure(id_mail, image=mail)
 	else:
 		canvas2.itemconfigure(id_mail, image=None)
+	isOuvert = portail.getField(0, "field1")
+	print("Portail : ", isOuvert)  # -1 si erreur de lecture
+	if isOuvert == 1:
+		canvas2.itemconfigure(id_portail, image=ouvert)
+	else:
+		canvas2.itemconfigure(id_portail, image=ferme)
 
 
 def maj10min():

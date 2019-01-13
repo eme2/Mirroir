@@ -26,6 +26,8 @@ class MenuSteClo:
                 self.jourSem += 1
             self.sem = str(dt.numSem())
 
+        self.sem= "0"+self.sem
+        self.sem = self.sem[-2:]
         url = "http://www.macantineetmoi.com/images/menu/sainte-clotilde/sainte-clotilde_S"+self.sem+".jpg"
         file_name = "menu.jpg"
         print("Recuperation de ", url)

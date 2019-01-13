@@ -22,6 +22,7 @@ class Thing:
         return
     self.ret = resp.status_code
     monJsonUtf = resp.content 
+    print("thing.py : self.ret", self.ret)
     monJson = monJsonUtf.decode("utf-8") 
  
     self.data = json.loads(monJson)
