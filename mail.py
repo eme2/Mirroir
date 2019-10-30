@@ -15,7 +15,7 @@ def sendMail(frm, to, msg, title):
     p.write("Subject: %s\n" % title)
     p.write("\n") # blank line separating headers from body
     p.write(msg)
-    p.write("...")    
+    p.write("... to be continued")    
     status = p.close()
     if status != 0:
            print("Sendmail exit status", status)
